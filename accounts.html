@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OFFICE · MY ACCOUNT</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@900&family=JetBrains+Mono:wght@500&family=Inter:wght@300;400&display=swap" rel="stylesheet">
+
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="nav"></header>
+
+  <div class="app">
+    <aside class="sidebar"></aside>
+
+    <main class="main" style="padding:0;">
+      <section class="accounts-layout">
+        <!-- LEFT -->
+        <div class="col">
+          <div class="profile-card">
+            <span class="mono-label">PROFILE</span>
+            <span id="profName" class="name">—</span>
+            <div class="row gap-12">
+              <span id="profRole" class="tag">—</span>
+              <span id="profEmail" class="mono-xs">—</span>
+            </div>
+            <div class="row gap-24" style="flex-wrap:wrap;">
+              <div class="stack">
+                <span class="mono-xs">UPI_ID</span>
+                <span id="profUpi" class="mono">—</span>
+              </div>
+              <div class="stack">
+                <span class="mono-xs">BANK_ACCOUNT</span>
+                <span id="profBank" class="mono">—</span>
+              </div>
+              <div class="stack">
+                <span class="mono-xs">IFSC</span>
+                <span id="profIfsc" class="mono">—</span>
+              </div>
+            </div>
+            <div class="stack">
+              <span class="mono-xs">MEMBER_SINCE</span>
+              <span id="profSince" class="mono">—</span>
+            </div>
+          </div>
+
+          <h2 class="page-title" style="font-size:2rem;margin-bottom:16px;">SALARY_LEDGER</h2>
+          <div id="salaryList" class="salary-list"></div>
+        </div>
+
+        <!-- RIGHT -->
+        <div class="col" style="position:relative;">
+          <h2 class="page-title" style="font-size:2rem;margin-bottom:16px;">ACTIVITY_CALENDAR</h2>
+          <div class="cal-header">
+            <button id="calPrev" class="btn-sq">◀</button>
+            <span id="calLabel" class="center">— —</span>
+            <button id="calNext" class="btn-sq">▶</button>
+          </div>
+          <div id="calGrid" class="cal-grid"></div>
+          <div id="calPopover" class="cal-popover hidden"></div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script type="module" src="js/accounts.js"></script>
+</body>
+</html>

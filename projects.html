@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OFFICE · PROJECTS</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@900&family=JetBrains+Mono:wght@500&family=Inter:wght@300;400&display=swap" rel="stylesheet">
+
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="nav"></header>
+
+  <div class="app">
+    <aside class="sidebar"></aside>
+
+    <main style="padding:0;">
+      <section class="projects-layout">
+        <!-- LEFT: project list -->
+        <aside class="proj-list">
+          <header>
+            <span class="mono-label">PROJECTS</span>
+            <input id="search" class="search" placeholder="SEARCH_PROJECTS...">
+          </header>
+          <ul id="projList"></ul>
+        </aside>
+
+        <!-- MIDDLE: thread -->
+        <section class="proj-thread">
+          <div class="proj-thread-header">
+            <div>
+              <h1 id="threadTitle">SELECT_PROJECT</h1>
+              <span id="threadStatus" class="mono-label">NO_THREAD_OPEN</span>
+            </div>
+          </div>
+          <div id="messages" class="messages">
+            <div class="empty">
+              <h1>NO_PROJECT_SELECTED</h1>
+              <p>PICK_A_PROJECT_FROM_THE_LEFT</p>
+            </div>
+          </div>
+          <div class="composer">
+            <input id="composer-input" class="input" placeholder="POST_LINK_OR_MESSAGE...">
+            <select id="composer-type" class="select">
+              <option>CHAT</option>
+              <option>IDEATION</option>
+              <option>SCRIPT</option>
+              <option>VIDEO</option>
+            </select>
+            <button id="composer-send" class="btn btn-accent">SUBMIT</button>
+          </div>
+        </section>
+
+        <!-- RIGHT: metadata -->
+        <aside class="proj-meta">
+          <h2 id="metaName">—</h2>
+          <div class="meta-row">
+            <span class="mono-label">DATE_CREATED</span><br>
+            <span id="metaDate" class="mono">—</span>
+          </div>
+          <div class="meta-row">
+            <span class="mono-label">DESCRIPTION</span>
+            <p id="metaDesc" style="margin-top:6px;">—</p>
+          </div>
+          <div class="meta-row">
+            <span class="mono-label">MEMBERS_ACTIVE</span>
+            <div id="metaMembers" class="mono" style="margin-top:6px;">0</div>
+          </div>
+          <div class="meta-row">
+            <span class="mono-label">LEADERBOARD</span>
+            <div id="metaBoard" class="leaderboard" style="margin-top:8px;"></div>
+          </div>
+        </aside>
+      </section>
+    </main>
+  </div>
+
+  <script type="module" src="js/projects.js"></script>
+</body>
+</html>

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OFFICE · ADMIN</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@900&family=JetBrains+Mono:wght@500&family=Inter:wght@300;400&display=swap" rel="stylesheet">
+
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="nav"></header>
+
+  <div class="admin-layout">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="row gap-8"><span class="dot dot-accent"></span><span class="mono-label">ADMIN_PORTAL</span></div>
+      </div>
+      <nav class="sidebar-nav" id="adminNav">
+        <a href="#" data-tab="overview" class="active">OVERVIEW</a>
+        <a href="#" data-tab="employees">ALL_EMPLOYEES</a>
+        <a href="#" data-tab="projects">PROJECTS_MANAGER</a>
+        <a href="#" data-tab="salary">SALARY_MANAGER</a>
+        <a href="#" data-tab="reactions">REACTIONS_CENTER</a>
+        <a href="#" data-tab="viewas">VIEW_AS_EMPLOYEE</a>
+        <a href="dashboard.html" style="color:var(--dim);">← EXIT_ADMIN</a>
+      </nav>
+      <div class="sidebar-footer">
+        <button id="adminLogout" class="btn btn-ghost">LOGOUT</button>
+      </div>
+    </aside>
+
+    <main class="main">
+
+      <!-- OVERVIEW -->
+      <section class="admin-tab active" data-tab="overview">
+        <h1 class="page-title">OVERVIEW</h1>
+        <div class="stat-grid">
+          <div class="cell"><div id="sTotalEmp" class="big">--</div><span class="mono-label">TOTAL_EMPLOYEES</span></div>
+          <div class="cell"><div id="sActiveProj" class="big">--</div><span class="mono-label">ACTIVE_PROJECTS</span></div>
+          <div class="cell"><div id="sMonthSubs" class="big">--</div><span class="mono-label">SUBMISSIONS_THIS_MONTH</span></div>
+          <div class="cell"><div id="sPending" class="big">--</div><span class="mono-label">PENDING_REACTIONS</span></div>
+        </div>
+        <div class="feed">
+          <h2>RECENT_ACTIVITY</h2>
+          <div id="adminFeed" class="stack"></div>
+        </div>
+      </section>
+
+      <!-- ALL EMPLOYEES -->
+      <section class="admin-tab" data-tab="employees">
+        <h1 class="page-title">ALL_EMPLOYEES</h1>
+        <div id="empTableHost"></div>
+      </section>
+
+      <!-- PROJECTS MANAGER -->
+      <section class="admin-tab" data-tab="projects">
+        <h1 class="page-title">PROJECTS_MANAGER</h1>
+        <div class="row gap-16 mb-24">
+          <button id="openCreateProj" class="btn btn-accent">CREATE_PROJECT</button>
+          <input id="projSearch" class="input" style="max-width:260px;" placeholder="SEARCH_PROJECTS...">
+        </div>
+        <div id="projAdminList"></div>
+      </section>
+
+      <!-- SALARY MANAGER -->
+      <section class="admin-tab" data-tab="salary">
+        <h1 class="page-title">SALARY_MANAGER</h1>
+        <div class="row gap-16 mb-24">
+          <select id="salaryFilter" class="select" style="max-width:240px;">
+            <option value="">ALL_ROLES</option>
+            <option>IDEATION</option>
+            <option>SCRIPT</option>
+            <option>VIDEO</option>
+            <option>MANAGER</option>
+          </select>
+        </div>
+        <div id="salaryMatrix" class="salary-matrix"></div>
+      </section>
+
+      <!-- REACTIONS CENTER -->
+      <section class="admin-tab" data-tab="reactions">
+        <h1 class="page-title">REACTIONS_CENTER</h1>
+        <div id="reactionFeed"></div>
+      </section>
+
+      <!-- VIEW AS EMPLOYEE -->
+      <section class="admin-tab" data-tab="viewas">
+        <h1 class="page-title">VIEW_AS_EMPLOYEE</h1>
+        <div class="row gap-16 mb-24">
+          <select id="viewAsSelect" class="select" style="max-width:320px;"></select>
+          <span id="viewAsLabel" class="mono-label"></span>
+        </div>
+        <div id="viewAsHost"></div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- Create Project Modal placeholder -->
+  <div id="createProjModal"></div>
+
+  <script type="module" src="js/admin.js"></script>
+</body>
+</html>

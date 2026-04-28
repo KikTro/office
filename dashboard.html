@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OFFICE · DASHBOARD</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@900&family=JetBrains+Mono:wght@500&family=Inter:wght@300;400&display=swap" rel="stylesheet">
+
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="nav"></header>
+
+  <div class="app">
+    <aside class="sidebar"></aside>
+
+    <main class="main">
+      <h1 id="greeting" class="page-title">WELCOME_BACK</h1>
+
+      <!-- BENTO -->
+      <section class="grid bento">
+        <div class="cell bento-card">
+          <div class="row gap-12" style="justify-content:space-between;">
+            <span class="mono-label">SYSTEM_01 · ACTIVE_PROJECTS</span>
+            <span class="geo"></span>
+          </div>
+          <div>
+            <div id="stat-projects" class="big">--</div>
+            <span class="mono-label">LIVE_THREADS</span>
+          </div>
+        </div>
+        <div class="cell bento-card">
+          <div class="row gap-12" style="justify-content:space-between;">
+            <span class="mono-label">SYSTEM_02 · MY_SUBMISSIONS</span>
+            <span class="geo"></span>
+          </div>
+          <div>
+            <div id="stat-submissions" class="big">--</div>
+            <span class="mono-label">THIS_MONTH</span>
+          </div>
+        </div>
+        <div class="cell bento-card">
+          <div class="row gap-12" style="justify-content:space-between;">
+            <span class="mono-label">SYSTEM_03 · SALARY_STATUS</span>
+            <span class="geo"></span>
+          </div>
+          <div>
+            <div id="stat-salary" class="big">--</div>
+            <span id="stat-salary-label" class="mono-label">CURRENT_MONTH</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ACTIVITY FEED -->
+      <section class="feed">
+        <h2>RECENT_ACTIVITY</h2>
+        <div id="feed" class="stack"></div>
+      </section>
+    </main>
+  </div>
+
+  <script type="module" src="js/dashboard.js"></script>
+</body>
+</html>
