@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>OFFICE · Sign In</title>
+  <title>KikTro Labs Digital Office and Workspace · Sign In</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -19,9 +19,11 @@
   <header class="nav">
     <div class="nav-left">
       <div class="brand">
-        <span class="brand-mark">O</span>
-        <span>OFFICE</span>
-        <span class="brand-sub">v.01</span>
+        <img src="TEXT%20LOGO.png" alt="KikTro Labs" class="brand-logo">
+        <div class="brand-text">
+          <span>KikTro Labs</span>
+          <span class="brand-sub">Digital Office & Workspace</span>
+        </div>
       </div>
     </div>
     <div class="nav-right">
@@ -29,10 +31,14 @@
     </div>
   </header>
 
+  <div class="protocol-tip hidden" id="protocolTip">
+    ⚠️ Google sign-in requires HTTPS or a local web server. Open the site via GitHub Pages or serve it locally instead of using file://.
+  </div>
+
   <main class="login-shell">
     <div class="login-card">
-      <h1>Welcome to Office</h1>
-      <p class="tag">Digital_Office_System · Agency_Only</p>
+      <h1>KikTro Labs Digital Office</h1>
+      <p class="tag">Workspace for teams, projects, and agency operations</p>
 
       <button id="signInBtn" class="google-btn">
         <span id="g-icon"></span>
@@ -75,6 +81,14 @@
       if (el) el.textContent = s;
     }
     tick(); setInterval(tick, 1000);
+
+    function showProtocolTip() {
+      if (location.protocol === 'file:') {
+        document.getElementById('protocolTip')?.classList.remove('hidden');
+      }
+    }
+
+    showProtocolTip();
 
     auth.onAuthStateChanged(async (user) => {
       if (user) {

@@ -25,12 +25,20 @@ export function toast(msg) {
 
 /* ---------- Auth actions ---------- */
 export async function signInWithGoogle() {
+  if (location.protocol === 'file:') {
+    toast('Use HTTPS or a local web server, not file://');
+    return null;
+  }
+
   try {
     const result = await auth.signInWithPopup(googleProvider);
     return result.user;
   } catch (err) {
     console.error(err);
-    toast('SIGN_IN_FAILED');
+    const msg = err.code === 'auth/operation-not-supported-in-this-environment'
+      ? 'Use HTTPS or GitHub Pages to sign in'
+      : 'SIGN_IN_FAILED';
+    toast(msg);
   }
 }
 
@@ -135,9 +143,11 @@ export function renderNav(user, profile) {
   nav.innerHTML = `
     <div class="nav-left">
       <div class="brand">
-        <span class="brand-mark">O</span>
-        <span>OFFICE</span>
-        <span class="brand-sub">v.01</span>
+        <img src="TEXT%20LOGO.png" alt="KikTro Labs" class="brand-logo">
+        <div class="brand-text">
+          <span>KikTro Labs</span>
+          <span class="brand-sub">Digital Office & Workspace</span>
+        </div>
       </div>
     </div>
     <div class="nav-right">

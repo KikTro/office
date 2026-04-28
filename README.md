@@ -1,6 +1,6 @@
-# OFFICE — Digital Office System
+# KikTro Labs Digital Office and Workspace
 
-A Swiss-brutalist, monochrome, editorial web-app for a creative agency.
+A dark dashboard-style digital office web app for agency workspaces.
 Built as a **pure static site** (HTML + CSS + vanilla JS) with **Firebase**
 (loaded via CDN) for Google Auth + Firestore. Deploys to GitHub Pages with
 zero build step.
@@ -31,7 +31,7 @@ zero build step.
 
 ```bash
 git add .
-git commit -m "Deploy OFFICE"
+git commit -m "Deploy KikTro Labs Digital Office"
 git push origin main
 ```
 
@@ -43,6 +43,10 @@ In the GitHub repo:
 
 > ⚠️ If deploying to a sub-path (e.g. `/office/`), all links in the HTML
 > files use relative paths so it works out of the box.
+
+> ⚠️ Google sign-in will not work when opening the pages with `file://`.
+> Run a local web server (for example `npx serve .` or VS Code Live Server) or
+> host the files on GitHub Pages / HTTPS.
 
 ---
 

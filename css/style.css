@@ -1,5 +1,5 @@
 /* =========================================================
-   OFFICE · Strategic Analytics Dashboard UI
+   KikTro Labs Digital Office and Workspace UI
    Dark theme · gradient bg · rounded cards · colored accents
    Inspired by Novartis/IDSync design system
    ========================================================= */
@@ -128,28 +128,32 @@ h1, h2, h3, h4 { font-weight: 600; letter-spacing: -0.01em; }
 .brand {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
   font-weight: 700;
-  font-size: 17px;
   letter-spacing: -0.02em;
 }
-.brand .brand-mark {
-  width: 28px; height: 28px;
-  border-radius: 8px;
-  background: linear-gradient(135deg, var(--accent) 0%, var(--ok) 100%);
-  display: flex; align-items: center; justify-content: center;
-  color: #fff;
-  font-weight: 800;
-  font-size: 14px;
-  box-shadow: 0 0 14px rgba(59, 130, 246, 0.35);
+.brand-logo {
+  width: 34px;
+  height: 34px;
+  border-radius: 12px;
+  object-fit: contain;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.08);
 }
-.brand .brand-sub {
+.brand-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.1;
+}
+.brand-text span:first-child {
+  font-size: 15px;
+}
+.brand-sub {
   font-family: var(--font-mono);
   font-size: 10px;
   color: var(--fg-dim);
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  margin-left: 2px;
 }
 
 .nav-right { display: flex; align-items: center; gap: 16px; }
@@ -755,6 +759,18 @@ h1, h2, h3, h4 { font-weight: 600; letter-spacing: -0.01em; }
 .text-accent { color: var(--accent); }
 
 /* ---------- Login page ---------- */
+.protocol-tip {
+  max-width: 900px;
+  margin: 16px auto 0;
+  padding: 14px 18px;
+  border-radius: 14px;
+  background: rgba(245, 158, 11, 0.1);
+  color: var(--fg);
+  border: 1px solid rgba(245, 158, 11, 0.2);
+  font-size: 13px;
+  text-align: center;
+}
+
 .login-shell {
   min-height: calc(100vh - var(--nav-h));
   display: flex;
