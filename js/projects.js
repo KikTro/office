@@ -5,7 +5,7 @@
 import { db, FieldValue } from './firebase-config.js';
 import {
   requireAuth, ensureProfile, renderNav, renderTabs,
-  roleTagHTML, statusPill, formatDate, isLink, ymd, toast, escape
+  roleTagHTML, rolesLabel, statusPill, formatDate, isLink, ymd, toast, escape
 } from './auth.js';
 import { ico } from './icons.js';
 
@@ -191,7 +191,7 @@ async function sendMessage() {
     await db.collection('projects').doc(selectedId).collection('messages').add({
       uid: user.uid,
       name: profile.name || user.displayName || 'User',
-      role: profile.role || '',
+      role: rolesLabel(profile.roles || profile.role),
       text,
       type,
       timestamp: FieldValue.serverTimestamp(),

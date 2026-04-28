@@ -6,7 +6,7 @@
 import { db } from './firebase-config.js';
 import {
   requireAuth, ensureProfile, renderNav, renderTabs,
-  roleTagHTML, statusPill, formatDate, ym, escape
+  roleTagHTML, rolesLabel, statusPill, formatDate, ym, escape
 } from './auth.js';
 import { ICONS, ico } from './icons.js';
 
@@ -42,7 +42,7 @@ document.getElementById('sideNav').innerHTML = navLinks.map((l)=>`
 const displayName = (profile.name || user.displayName || 'there').split(' ')[0];
 document.getElementById('greetTitle').textContent = `Welcome back, ${displayName}`;
 document.getElementById('greetSub').textContent =
-  `${profile.role || 'Member'} · ${new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}`;
+  `${rolesLabel(profile.roles || profile.role)} · ${new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}`;
 
 document.getElementById('goProjects').addEventListener('click', () => location.href = 'projects.html');
 

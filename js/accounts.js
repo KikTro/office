@@ -4,7 +4,7 @@
 
 import { db } from './firebase-config.js';
 import {
-  requireAuth, ensureProfile, renderNav, renderTabs, ym, escape
+  requireAuth, ensureProfile, renderNav, renderTabs, rolesLabel, ym, escape
 } from './auth.js';
 import { ico } from './icons.js';
 
@@ -26,8 +26,8 @@ const initial = (profile.name || user.displayName || '?').trim().charAt(0).toUpp
 document.getElementById('avatar').textContent = initial;
 document.getElementById('profName').textContent = profile.name || 'User';
 const roleEl = document.getElementById('profRole');
-roleEl.textContent = profile.role || '—';
-roleEl.className = `role-pill role-${profile.role || ''}`;
+roleEl.textContent = rolesLabel(profile.roles || profile.role);
+roleEl.className = 'role-pill';
 document.getElementById('profEmail').textContent = profile.email || '—';
 document.getElementById('profUpi').textContent = maskMiddle(profile.upiId);
 document.getElementById('profBank').textContent = maskMiddle(profile.bankAccount);

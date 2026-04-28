@@ -6,7 +6,7 @@
 import { auth, db, FieldValue, ADMIN_UID } from './firebase-config.js';
 import {
   ensureProfile, renderNav, toast, signOut,
-  roleTagHTML, statusPill, formatDate, ym, isLink, escape
+  roleTagHTML, rolesLabel, statusPill, formatDate, ym, isLink, escape
 } from './auth.js';
 import { ico } from './icons.js';
 
@@ -368,7 +368,11 @@ function renderSalaryMatrix() {
   salaryMap = {};
 
   const roleFilter = salaryFilter.value;
-  const employees = allUsers.filter((u)=>!roleFilter || u.role === roleFilter);
+  const employees = allUsers.filter((u)=>{
+    if (!roleFilter) return true;
+    const roles = Array.isArray(u.role) ? u.role : [u.role];
+    return roles.includes(roleFilter);
+  });
 
   const today = new Date();
   const months = [];
@@ -441,7 +445,7 @@ const viewAsHost = document.getElementById('viewAsHost');
 function renderViewAsDropdown() {
   const current = viewAsSelect.value;
   viewAsSelect.innerHTML = `<option value="">Select an employee…</option>` +
-    allUsers.map((u)=>`<option value="${u.id}" ${u.id===current?'selected':''}>${escape(u.name||'—')} · ${u.role||''}</option>`).join('');
+    allUsers.map((u)=>`<option value="${u.id}" ${u.id===current?'selected':''}>${escape(u.name||'—')} · ${escape(rolesLabel(u.roles || u.role))}</option>`).join('');
 }
 viewAsSelect.addEventListener('change', () => renderViewAs(viewAsSelect.value));
 

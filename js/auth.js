@@ -67,6 +67,22 @@ export async function ensureProfile(user) {
   return await showProfileSetup(user);
 }
 
+export function normalizeRoles(roleOrRoles) {
+  if (!roleOrRoles) return [];
+  return Array.isArray(roleOrRoles) ? roleOrRoles : [roleOrRoles];
+}
+
+export function rolesLabel(roleOrRoles) {
+  const roles = normalizeRoles(roleOrRoles);
+  return roles.length ? roles.join(', ') : 'Member';
+}
+
+export function roleTagHTML(roleOrRoles) {
+  const roles = normalizeRoles(roleOrRoles);
+  if (!roles.length) return '';
+  return roles.map((role) => `<span class="role-pill role-${role}">${role}</span>`).join(' ');
+}
+
 function showProfileSetup(user) {
   return new Promise((resolve) => {
     const bd = document.createElement('div');
@@ -81,10 +97,10 @@ function showProfileSetup(user) {
             <input class="input" name="name" required value="${escape(user.displayName || '')}">
           </div>
           <div class="field">
-            <label>Role</label>
+            <label>Roles</label>
             <div class="pill-group">
-              ${['IDEATION','SCRIPT','VIDEO','MANAGER'].map((r,i)=>`
-                <label><input type="radio" name="role" value="${r}" ${i===0?'checked':''}>${r}</label>
+              ${['IDEATION','SCRIPT','VIDEO','MANAGER'].map((r)=>`
+                <label><input type="checkbox" name="roles" value="${r}">${r}</label>
               `).join('')}
             </div>
           </div>
@@ -113,12 +129,18 @@ function showProfileSetup(user) {
     bd.querySelector('#profileForm').addEventListener('submit', async (e) => {
       e.preventDefault();
       const fd = new FormData(e.target);
+      const roles = fd.getAll('roles').map((r) => r.toString()).filter(Boolean);
+      if (!roles.length) {
+        toast('Select at least one role');
+        return;
+      }
       const data = {
         uid: user.uid,
         email: user.email,
         photoURL: user.photoURL || '',
         name: fd.get('name').toString().trim(),
-        role: fd.get('role').toString(),
+        role: roles[0],
+        roles,
         upiId: fd.get('upiId').toString().trim(),
         bankAccount: fd.get('bankAccount').toString().trim(),
         ifsc: fd.get('ifsc').toString().trim(),
