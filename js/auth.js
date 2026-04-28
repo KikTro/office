@@ -1,13 +1,11 @@
 /* =========================================================
-   AUTH HELPERS — shared across all pages
-   Provides: sign-in/out, session guard, profile setup modal,
-             toast notifications, lastSeen heartbeat,
-             and small UI helpers (role tag, nav render).
+   AUTH HELPERS — shared across pages
    ========================================================= */
 
 import { auth, db, googleProvider, ADMIN_UID, FieldValue } from './firebase-config.js';
+import { ICONS, ico } from './icons.js';
 
-// ---------- Toast ----------
+/* ---------- Toast ---------- */
 export function toast(msg) {
   let host = document.querySelector('.toast-host');
   if (!host) {
@@ -21,11 +19,11 @@ export function toast(msg) {
   host.appendChild(t);
   setTimeout(() => {
     t.classList.add('out');
-    setTimeout(() => t.remove(), 300);
-  }, 2700);
+    setTimeout(() => t.remove(), 260);
+  }, 2600);
 }
 
-// ---------- Sign-in / sign-out ----------
+/* ---------- Auth actions ---------- */
 export async function signInWithGoogle() {
   try {
     const result = await auth.signInWithPopup(googleProvider);
@@ -41,26 +39,20 @@ export async function signOut() {
   location.href = 'index.html';
 }
 
-// ---------- Guard: redirect unauthenticated users ----------
-// Returns a Promise<user> once auth state is determined.
 export function requireAuth() {
   return new Promise((resolve) => {
     auth.onAuthStateChanged((user) => {
-      if (!user) {
-        location.href = 'index.html';
-        return;
-      }
+      if (!user) { location.href = 'index.html'; return; }
       resolve(user);
     });
   });
 }
 
-// ---------- Ensure profile doc exists; if not, show setup modal ----------
+/* ---------- Profile doc bootstrap ---------- */
 export async function ensureProfile(user) {
   const ref = db.collection('users').doc(user.uid);
   const snap = await ref.get();
   if (snap.exists) {
-    // Update lastSeen heartbeat
     ref.update({ lastSeen: FieldValue.serverTimestamp() }).catch(() => {});
     return snap.data();
   }
@@ -69,48 +61,50 @@ export async function ensureProfile(user) {
 
 function showProfileSetup(user) {
   return new Promise((resolve) => {
-    const backdrop = document.createElement('div');
-    backdrop.className = 'modal-backdrop';
-    backdrop.innerHTML = `
+    const bd = document.createElement('div');
+    bd.className = 'modal-backdrop';
+    bd.innerHTML = `
       <div class="modal">
-        <h2>COMPLETE_SETUP</h2>
-        <p class="sub">ONE_TIME · AGENCY_ONBOARDING</p>
+        <h2>Complete your profile</h2>
+        <p class="sub">One-time onboarding · Agency access</p>
         <form id="profileForm">
-          <div class="form-field">
-            <label class="form-label">FULL_NAME</label>
-            <input class="input" name="name" required value="${user.displayName || ''}" placeholder="FULL_NAME">
+          <div class="field">
+            <label>Full name</label>
+            <input class="input" name="name" required value="${escape(user.displayName || '')}">
           </div>
-          <div class="form-field">
-            <label class="form-label">ROLE_TYPE</label>
+          <div class="field">
+            <label>Role</label>
             <div class="pill-group">
               ${['IDEATION','SCRIPT','VIDEO','MANAGER'].map((r,i)=>`
-                <label><input type="radio" name="role" value="${r}" ${i===0?'checked':''}><span>${r}</span></label>
+                <label><input type="radio" name="role" value="${r}" ${i===0?'checked':''}>${r}</label>
               `).join('')}
             </div>
           </div>
-          <div class="form-field">
-            <label class="form-label">UPI_ID</label>
-            <input class="input" name="upiId" placeholder="UPI_ID_OR_@HANDLE">
+          <div class="field">
+            <label>UPI ID</label>
+            <input class="input" name="upiId" placeholder="yourname@okaxis">
           </div>
-          <div class="form-field">
-            <label class="form-label">BANK_ACCOUNT</label>
-            <input class="input" name="bankAccount" placeholder="ACCOUNT_NUMBER">
+          <div class="field">
+            <label>Bank account</label>
+            <input class="input" name="bankAccount" placeholder="Account number">
           </div>
-          <div class="form-field">
-            <label class="form-label">IFSC_CODE</label>
-            <input class="input" name="ifsc" placeholder="IFSC_CODE">
+          <div class="field">
+            <label>IFSC code</label>
+            <input class="input" name="ifsc" placeholder="IFSC code">
           </div>
-          <p class="mono-xs" style="margin-top:8px;">PAYMENT_DETAILS_ARE_ENCRYPTED_AND_VISIBLE_ONLY_TO_ADMIN</p>
-          <button type="submit" class="btn btn-accent" style="margin-top:16px;align-self:flex-start;">COMPLETE_SETUP</button>
+          <p class="text-xs text-dim" style="font-family: var(--font-mono); letter-spacing: 0.1em;">
+            PAYMENT_DETAILS_ENCRYPTED · VISIBLE_ONLY_TO_ADMIN
+          </p>
+          <div class="row">
+            <button type="submit" class="ctrl primary">Complete setup</button>
+          </div>
         </form>
-      </div>
-    `;
-    document.body.appendChild(backdrop);
+      </div>`;
+    document.body.appendChild(bd);
 
-    const form = backdrop.querySelector('#profileForm');
-    form.addEventListener('submit', async (e) => {
+    bd.querySelector('#profileForm').addEventListener('submit', async (e) => {
       e.preventDefault();
-      const fd = new FormData(form);
+      const fd = new FormData(e.target);
       const data = {
         uid: user.uid,
         email: user.email,
@@ -124,91 +118,82 @@ function showProfileSetup(user) {
         lastSeen: FieldValue.serverTimestamp()
       };
       await db.collection('users').doc(user.uid).set(data);
-      backdrop.remove();
+      bd.remove();
       toast('PROFILE_CREATED');
       resolve(data);
     });
   });
 }
 
-// ---------- Shared nav bar rendering ----------
+/* ---------- Shared nav (top bar) ---------- */
 export function renderNav(user, profile) {
-  const isAdmin = user.uid === ADMIN_UID;
   const nav = document.querySelector('.nav');
   if (!nav) return;
+  const isAdmin = user.uid === ADMIN_UID;
+  const initial = (profile?.name || user.displayName || '?').trim().charAt(0).toUpperCase();
+
   nav.innerHTML = `
     <div class="nav-left">
-      <span class="brand">OFFICE</span>
-      <span class="dot"></span>
-      <span class="version">OFFICE_V.01</span>
+      <div class="brand">
+        <span class="brand-mark">O</span>
+        <span>OFFICE</span>
+        <span class="brand-sub">v.01</span>
+      </div>
     </div>
     <div class="nav-right">
-      <div class="nav-user">
-        <span class="online-dot"></span>
-        <div class="stack" style="align-items:flex-end;">
-          <span class="name">${profile?.name || user.displayName || 'USER'}</span>
-          <span class="role">${profile?.role || ''}${isAdmin ? ' · ADMIN' : ''}</span>
+      ${isAdmin ? `<a href="admin.html" class="ctrl" style="color: var(--warn); border-color: rgba(245,158,11,0.4);">${ico('shield', 14)} ADMIN</a>` : ''}
+      <div class="profile-pill" id="profilePill">
+        <div class="avatar">${initial}</div>
+        <div class="pmeta">
+          <span class="pname">${escape(profile?.name || user.displayName || 'User')}</span>
+          <span class="prole">${profile?.role || 'Member'}</span>
         </div>
+        <span class="online-dot" title="Online"></span>
       </div>
-      <button id="logoutBtn" class="btn btn-ghost">LOGOUT</button>
-    </div>
-  `;
+      <button id="logoutBtn" class="ctrl" title="Logout">${ico('logout', 14)}</button>
+    </div>`;
   nav.querySelector('#logoutBtn').addEventListener('click', signOut);
 }
 
-// ---------- Shared sidebar rendering ----------
-// `activeId` = one of: dashboard, projects, accounts (or 'admin-*' for admin nav)
-export function renderSidebar(user, profile, activeId, opts = {}) {
-  const isAdmin = user.uid === ADMIN_UID;
-  const sb = document.querySelector('.sidebar');
-  if (!sb) return;
-
-  const initial = (profile?.name || user.displayName || '?').trim().charAt(0).toUpperCase();
-  const adminBadge = isAdmin ? `<span class="tag tag-invert" style="margin-top:6px;">ADMIN</span>` : '';
-
-  // unread dot for projects link (compare lastVisitedProjects localStorage)
-  const lastVisited = Number(localStorage.getItem('lastVisitedProjects') || 0);
-  const hasUnread = opts.latestMessageTs && opts.latestMessageTs > lastVisited;
-
-  sb.innerHTML = `
-    <div class="sidebar-header">
-      <div class="row gap-8"><span class="dot"></span><span class="mono-label">AGENCY_OFFICE</span></div>
-    </div>
-    <nav class="sidebar-nav">
-      <a href="dashboard.html" class="${activeId==='dashboard'?'active':''}">DASHBOARD</a>
-      <a href="projects.html" class="${activeId==='projects'?'active':''}">
-        PROJECTS ${hasUnread ? '<span class="notif-dot"></span>' : ''}
-      </a>
-      <a href="accounts.html" class="${activeId==='accounts'?'active':''}">MY_ACCOUNT</a>
-    </nav>
-    <div class="sidebar-footer">
-      <div class="row gap-12">
-        <div class="avatar-sq">${initial}</div>
-        <div class="stack">
-          <span class="mono" style="font-size:11px;">${profile?.name || user.displayName || 'USER'}</span>
-          <span class="mono-xs">${profile?.role || ''}</span>
-        </div>
-      </div>
-      ${adminBadge}
-      <button id="sbLogout" class="btn btn-ghost">LOGOUT</button>
-    </div>
-  `;
-  sb.querySelector('#sbLogout').addEventListener('click', signOut);
+/* ---------- Horizontal tab strip (below nav) ---------- */
+export function renderTabs(activeId) {
+  const host = document.querySelector('.tabs');
+  if (!host) return;
+  const tabs = [
+    { id: 'dashboard', label: 'Dashboard', icon: 'dashboard', href: 'dashboard.html' },
+    { id: 'projects',  label: 'Projects',  icon: 'projects',  href: 'projects.html'  },
+    { id: 'accounts',  label: 'My Account',icon: 'account',   href: 'accounts.html'  },
+  ];
+  host.innerHTML = tabs.map((t)=>`
+    <a class="tab ${t.id===activeId?'active':''}" href="${t.href}">
+      ${ico(t.icon, 16)}<span>${t.label}</span>
+    </a>
+  `).join('');
 }
 
-// ---------- Misc helpers ----------
+/* ---------- Helpers ---------- */
 export function roleTagHTML(role) {
   if (!role) return '';
-  const cls = `tag role-${role}`;
-  return `<span class="${cls}">${role}</span>`;
+  return `<span class="role-pill role-${role}">${role}</span>`;
+}
+
+export function statusPill(status) {
+  const cls = {
+    'Completed':'completed', 'In Progress':'in-progress', 'Blocked':'blocked',
+    'ACTIVE':'completed', 'APPROVED':'completed', 'PENDING':'pending', 'REJECTED':'blocked',
+    'PAID':'completed'
+  }[status] || 'pending';
+  return `<span class="status-pill ${cls}"><span class="dot"></span>${status}</span>`;
 }
 
 export function formatDate(ts) {
-  if (!ts) return '--/--/----';
+  if (!ts) return '--';
   const d = ts.toDate ? ts.toDate() : new Date(ts);
   const dd = String(d.getDate()).padStart(2,'0');
   const mm = String(d.getMonth()+1).padStart(2,'0');
-  return `${dd}/${mm}/${d.getFullYear()} · ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
+  const hh = String(d.getHours()).padStart(2,'0');
+  const mi = String(d.getMinutes()).padStart(2,'0');
+  return `${dd}/${mm}/${d.getFullYear()} · ${hh}:${mi}`;
 }
 
 export function ymd(d) {
@@ -218,8 +203,14 @@ export function ym(d) {
   return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;
 }
 
-export function isLink(text) {
+export function isLink(text='') {
   try { const u = new URL(text.trim()); return !!u.protocol; } catch { return /^https?:\/\//i.test(text); }
 }
 
-export { ADMIN_UID };
+export function escape(str='') {
+  return String(str).replace(/[&<>"']/g, (c)=>({
+    '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+  }[c]));
+}
+
+export { ADMIN_UID, ICONS, ico };

@@ -3,66 +3,106 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>OFFICE · DASHBOARD</title>
+  <title>OFFICE · Dashboard</title>
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@900&family=JetBrains+Mono:wght@500&family=Inter:wght@300;400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
 
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
   <header class="nav"></header>
+  <nav class="tabs"></nav>
 
   <div class="app">
-    <aside class="sidebar"></aside>
+    <!-- LEFT SIDEBAR — Strategic imperatives (your recent projects) -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <span id="sideHeadIcon"></span>
+        <h2>Navigation</h2>
+      </div>
+      <nav class="sidebar-nav" id="sideNav"></nav>
 
-    <main class="main">
-      <h1 id="greeting" class="page-title">WELCOME_BACK</h1>
+      <div class="sidebar-header">
+        <span id="sideImpIcon"></span>
+        <h2>Strategic Imperatives</h2>
+      </div>
+      <div id="sideProjects"></div>
+    </aside>
 
-      <!-- BENTO -->
-      <section class="grid bento">
-        <div class="cell bento-card">
-          <div class="row gap-12" style="justify-content:space-between;">
-            <span class="mono-label">SYSTEM_01 · ACTIVE_PROJECTS</span>
-            <span class="geo"></span>
-          </div>
+    <!-- CENTER MAIN -->
+    <main class="main" id="mainArea">
+      <!-- Page header -->
+      <div class="page-header">
+        <div class="title-group">
+          <div class="title-icon" id="pageHeaderIcon"></div>
           <div>
-            <div id="stat-projects" class="big">--</div>
-            <span class="mono-label">LIVE_THREADS</span>
+            <h1 id="greetTitle">Welcome back</h1>
+            <div class="text-xs text-dim" id="greetSub">Loading workspace…</div>
           </div>
         </div>
-        <div class="cell bento-card">
-          <div class="row gap-12" style="justify-content:space-between;">
-            <span class="mono-label">SYSTEM_02 · MY_SUBMISSIONS</span>
-            <span class="geo"></span>
-          </div>
-          <div>
-            <div id="stat-submissions" class="big">--</div>
-            <span class="mono-label">THIS_MONTH</span>
-          </div>
+        <div class="controls">
+          <button class="ctrl" id="periodBtn"><span id="calIc"></span><span>Last 6 months</span></button>
+          <button class="ctrl primary" id="goProjects">Open projects <span id="arrIc"></span></button>
         </div>
-        <div class="cell bento-card">
-          <div class="row gap-12" style="justify-content:space-between;">
-            <span class="mono-label">SYSTEM_03 · SALARY_STATUS</span>
-            <span class="geo"></span>
-          </div>
-          <div>
-            <div id="stat-salary" class="big">--</div>
-            <span id="stat-salary-label" class="mono-label">CURRENT_MONTH</span>
-          </div>
-        </div>
-      </section>
+      </div>
 
-      <!-- ACTIVITY FEED -->
-      <section class="feed">
-        <h2>RECENT_ACTIVITY</h2>
-        <div id="feed" class="stack"></div>
-      </section>
+      <!-- Pillar cards (role distribution-ish) -->
+      <div class="pillar-grid" id="pillarGrid"></div>
+
+      <!-- Health chart (submissions by role over time) -->
+      <div class="chart-card">
+        <h3 class="chart-title">Project Health · Submissions by role</h3>
+        <div class="chart-wrap">
+          <canvas id="healthChart"></canvas>
+        </div>
+        <div class="chart-legend" id="chartLegend"></div>
+      </div>
+
+      <!-- Work done (weekly bar chart) -->
+      <div class="spark-card">
+        <h3>Work Done</h3>
+        <p class="sub">Your submissions over the last 8 weeks</p>
+        <div class="chart-wrap" style="height: 220px;">
+          <canvas id="workChart"></canvas>
+        </div>
+      </div>
+
+      <!-- Recent activity feed -->
+      <div class="card" style="margin-bottom: 160px;">
+        <div class="feed-title">
+          <span id="feedIcon"></span>
+          <span>Recent activity</span>
+        </div>
+        <div id="feed"></div>
+      </div>
     </main>
+
+    <!-- RIGHT SIDEBAR — Quick actions + Key insights -->
+    <aside class="sidebar right">
+      <div class="sidebar-header">
+        <span id="qaIcon"></span>
+        <h2>Quick Actions</h2>
+      </div>
+      <div id="quickActions" class="pill-group" style="gap: 8px; margin-bottom: 24px;"></div>
+
+      <div class="sidebar-header">
+        <span id="kiIcon"></span>
+        <h2>Key Insights</h2>
+      </div>
+      <div id="keyInsights"></div>
+    </aside>
+  </div>
+
+  <!-- FIXED BOTTOM METRIC ROW -->
+  <div class="metric-row">
+    <div class="metric-grid" id="metricRow"></div>
   </div>
 
   <script type="module" src="js/dashboard.js"></script>

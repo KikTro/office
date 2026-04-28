@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>OFFICE · ADMIN</title>
+  <title>OFFICE · Admin</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@900&family=JetBrains+Mono:wght@500&family=Inter:wght@300;400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
@@ -20,91 +20,153 @@
   <div class="admin-layout">
     <aside class="sidebar">
       <div class="sidebar-header">
-        <div class="row gap-8"><span class="dot dot-accent"></span><span class="mono-label">ADMIN_PORTAL</span></div>
+        <span id="adminShield"></span>
+        <h2>Admin Portal</h2>
       </div>
       <nav class="sidebar-nav" id="adminNav">
-        <a href="#" data-tab="overview" class="active">OVERVIEW</a>
-        <a href="#" data-tab="employees">ALL_EMPLOYEES</a>
-        <a href="#" data-tab="projects">PROJECTS_MANAGER</a>
-        <a href="#" data-tab="salary">SALARY_MANAGER</a>
-        <a href="#" data-tab="reactions">REACTIONS_CENTER</a>
-        <a href="#" data-tab="viewas">VIEW_AS_EMPLOYEE</a>
-        <a href="dashboard.html" style="color:var(--dim);">← EXIT_ADMIN</a>
+        <a class="side-link active" data-tab="overview" href="#">Overview</a>
+        <a class="side-link" data-tab="employees" href="#">All Employees</a>
+        <a class="side-link" data-tab="projects" href="#">Projects Manager</a>
+        <a class="side-link" data-tab="salary" href="#">Salary Manager</a>
+        <a class="side-link" data-tab="reactions" href="#">Reactions Center</a>
+        <a class="side-link" data-tab="viewas" href="#">View as Employee</a>
       </nav>
-      <div class="sidebar-footer">
-        <button id="adminLogout" class="btn btn-ghost">LOGOUT</button>
+
+      <div class="sidebar-header" style="margin-top: 24px;">
+        <h2 style="font-size:12px; color: var(--fg-dim);">Exit</h2>
       </div>
+      <nav class="sidebar-nav">
+        <a class="side-link" href="dashboard.html">← Back to Dashboard</a>
+      </nav>
     </aside>
 
     <main class="main">
 
       <!-- OVERVIEW -->
       <section class="admin-tab active" data-tab="overview">
-        <h1 class="page-title">OVERVIEW</h1>
-        <div class="stat-grid">
-          <div class="cell"><div id="sTotalEmp" class="big">--</div><span class="mono-label">TOTAL_EMPLOYEES</span></div>
-          <div class="cell"><div id="sActiveProj" class="big">--</div><span class="mono-label">ACTIVE_PROJECTS</span></div>
-          <div class="cell"><div id="sMonthSubs" class="big">--</div><span class="mono-label">SUBMISSIONS_THIS_MONTH</span></div>
-          <div class="cell"><div id="sPending" class="big">--</div><span class="mono-label">PENDING_REACTIONS</span></div>
+        <div class="page-header">
+          <div class="title-group">
+            <div class="title-icon" id="overviewIcon"></div>
+            <div>
+              <h1>Admin overview</h1>
+              <div class="text-xs text-dim">Real-time agency metrics</div>
+            </div>
+          </div>
         </div>
-        <div class="feed">
-          <h2>RECENT_ACTIVITY</h2>
-          <div id="adminFeed" class="stack"></div>
+
+        <div class="stat-grid">
+          <div class="stat-card ok">
+            <div class="big" id="sTotalEmp">--</div>
+            <div class="lbl">Total employees</div>
+          </div>
+          <div class="stat-card blue">
+            <div class="big" id="sActiveProj">--</div>
+            <div class="lbl">Active projects</div>
+          </div>
+          <div class="stat-card warn">
+            <div class="big" id="sMonthSubs">--</div>
+            <div class="lbl">Subs this month</div>
+          </div>
+          <div class="stat-card purple">
+            <div class="big" id="sPending">--</div>
+            <div class="lbl">Pending reactions</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="feed-title"><span id="feedIc"></span><span>Recent activity</span></div>
+          <div id="adminFeed"></div>
         </div>
       </section>
 
-      <!-- ALL EMPLOYEES -->
+      <!-- EMPLOYEES -->
       <section class="admin-tab" data-tab="employees">
-        <h1 class="page-title">ALL_EMPLOYEES</h1>
+        <div class="page-header">
+          <div class="title-group">
+            <div class="title-icon" id="empIcon"></div>
+            <div>
+              <h1>All employees</h1>
+              <div class="text-xs text-dim">Agency roster &amp; payment details</div>
+            </div>
+          </div>
+        </div>
         <div id="empTableHost"></div>
       </section>
 
-      <!-- PROJECTS MANAGER -->
+      <!-- PROJECTS -->
       <section class="admin-tab" data-tab="projects">
-        <h1 class="page-title">PROJECTS_MANAGER</h1>
-        <div class="row gap-16 mb-24">
-          <button id="openCreateProj" class="btn btn-accent">CREATE_PROJECT</button>
-          <input id="projSearch" class="input" style="max-width:260px;" placeholder="SEARCH_PROJECTS...">
+        <div class="page-header">
+          <div class="title-group">
+            <div class="title-icon" id="projIcon"></div>
+            <div>
+              <h1>Projects manager</h1>
+              <div class="text-xs text-dim">Create, edit, and delete project threads</div>
+            </div>
+          </div>
+          <div class="controls">
+            <button class="ctrl primary" id="openCreateProj">
+              <span id="plusIc"></span><span>Create project</span>
+            </button>
+            <input id="projSearch" class="input" style="max-width:240px;" placeholder="Search projects…">
+          </div>
         </div>
         <div id="projAdminList"></div>
       </section>
 
-      <!-- SALARY MANAGER -->
+      <!-- SALARY -->
       <section class="admin-tab" data-tab="salary">
-        <h1 class="page-title">SALARY_MANAGER</h1>
-        <div class="row gap-16 mb-24">
-          <select id="salaryFilter" class="select" style="max-width:240px;">
-            <option value="">ALL_ROLES</option>
-            <option>IDEATION</option>
-            <option>SCRIPT</option>
-            <option>VIDEO</option>
-            <option>MANAGER</option>
-          </select>
+        <div class="page-header">
+          <div class="title-group">
+            <div class="title-icon" id="salIcon"></div>
+            <div>
+              <h1>Salary manager</h1>
+              <div class="text-xs text-dim">Click a cell to toggle paid / pending</div>
+            </div>
+          </div>
+          <div class="controls">
+            <select id="salaryFilter" class="select" style="max-width:200px;">
+              <option value="">All roles</option>
+              <option>IDEATION</option><option>SCRIPT</option><option>VIDEO</option><option>MANAGER</option>
+            </select>
+          </div>
         </div>
-        <div id="salaryMatrix" class="salary-matrix"></div>
+        <div id="salaryMatrix"></div>
       </section>
 
-      <!-- REACTIONS CENTER -->
+      <!-- REACTIONS -->
       <section class="admin-tab" data-tab="reactions">
-        <h1 class="page-title">REACTIONS_CENTER</h1>
+        <div class="page-header">
+          <div class="title-group">
+            <div class="title-icon" id="rxIcon"></div>
+            <div>
+              <h1>Reactions center</h1>
+              <div class="text-xs text-dim">Approve or reject pending submissions</div>
+            </div>
+          </div>
+        </div>
         <div id="reactionFeed"></div>
       </section>
 
-      <!-- VIEW AS EMPLOYEE -->
+      <!-- VIEW AS -->
       <section class="admin-tab" data-tab="viewas">
-        <h1 class="page-title">VIEW_AS_EMPLOYEE</h1>
-        <div class="row gap-16 mb-24">
-          <select id="viewAsSelect" class="select" style="max-width:320px;"></select>
-          <span id="viewAsLabel" class="mono-label"></span>
+        <div class="page-header">
+          <div class="title-group">
+            <div class="title-icon" id="vaIcon"></div>
+            <div>
+              <h1>View as employee</h1>
+              <div class="text-xs text-dim">Read-only impersonation view</div>
+            </div>
+          </div>
+          <div class="controls">
+            <select id="viewAsSelect" class="select" style="max-width:280px;"></select>
+          </div>
         </div>
         <div id="viewAsHost"></div>
       </section>
-
     </main>
   </div>
 
-  <!-- Create Project Modal placeholder -->
-  <div id="createProjModal"></div>
+  <div id="modalHost"></div>
 
   <script type="module" src="js/admin.js"></script>
 </body>

@@ -3,72 +3,103 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>OFFICE · MY ACCOUNT</title>
+  <title>OFFICE · My Account</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@900&family=JetBrains+Mono:wght@500&family=Inter:wght@300;400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
 
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
   <header class="nav"></header>
+  <nav class="tabs"></nav>
 
-  <div class="app">
-    <aside class="sidebar"></aside>
+  <main class="main" style="padding-bottom: 160px;">
+    <!-- Page header -->
+    <div class="page-header">
+      <div class="title-group">
+        <div class="title-icon" id="pageIcon"></div>
+        <div>
+          <h1>My account</h1>
+          <div class="text-xs text-dim">Profile, payments, and activity</div>
+        </div>
+      </div>
+    </div>
 
-    <main class="main" style="padding:0;">
-      <section class="accounts-layout">
-        <!-- LEFT -->
-        <div class="col">
-          <div class="profile-card">
-            <span class="mono-label">PROFILE</span>
-            <span id="profName" class="name">—</span>
-            <div class="row gap-12">
-              <span id="profRole" class="tag">—</span>
-              <span id="profEmail" class="mono-xs">—</span>
+    <div class="accounts-layout">
+      <!-- LEFT COLUMN -->
+      <div>
+        <!-- Profile card -->
+        <div class="profile-block">
+          <div class="big-avatar" id="avatar">?</div>
+          <h1 id="profName">—</h1>
+          <div class="row gap-12" style="margin-bottom:6px;">
+            <span class="role-pill" id="profRole">—</span>
+            <span class="status-pill active"><span class="dot"></span>Online</span>
+          </div>
+          <div class="email" id="profEmail">—</div>
+          <div class="pdetails">
+            <div class="item">
+              <div class="label">UPI ID</div>
+              <div class="value" id="profUpi">—</div>
             </div>
-            <div class="row gap-24" style="flex-wrap:wrap;">
-              <div class="stack">
-                <span class="mono-xs">UPI_ID</span>
-                <span id="profUpi" class="mono">—</span>
-              </div>
-              <div class="stack">
-                <span class="mono-xs">BANK_ACCOUNT</span>
-                <span id="profBank" class="mono">—</span>
-              </div>
-              <div class="stack">
-                <span class="mono-xs">IFSC</span>
-                <span id="profIfsc" class="mono">—</span>
-              </div>
+            <div class="item">
+              <div class="label">Bank account</div>
+              <div class="value" id="profBank">—</div>
             </div>
-            <div class="stack">
-              <span class="mono-xs">MEMBER_SINCE</span>
-              <span id="profSince" class="mono">—</span>
+            <div class="item">
+              <div class="label">IFSC</div>
+              <div class="value" id="profIfsc">—</div>
+            </div>
+            <div class="item">
+              <div class="label">Member since</div>
+              <div class="value" id="profSince">—</div>
             </div>
           </div>
-
-          <h2 class="page-title" style="font-size:2rem;margin-bottom:16px;">SALARY_LEDGER</h2>
-          <div id="salaryList" class="salary-list"></div>
         </div>
 
-        <!-- RIGHT -->
-        <div class="col" style="position:relative;">
-          <h2 class="page-title" style="font-size:2rem;margin-bottom:16px;">ACTIVITY_CALENDAR</h2>
+        <!-- Salary ledger -->
+        <div class="card" style="padding: 20px;">
+          <h3 style="font-size:16px; font-weight:600; margin-bottom:4px;">Salary ledger</h3>
+          <p class="text-xs text-dim" style="margin-bottom:16px;">Last 12 months of payout status</p>
+          <div id="salaryList" class="salary-list"></div>
+        </div>
+      </div>
+
+      <!-- RIGHT COLUMN -->
+      <div>
+        <!-- Year work chart -->
+        <div class="spark-card">
+          <h3>Work done · 12 months</h3>
+          <p class="sub">Monthly submission totals</p>
+          <div class="chart-wrap" style="height: 220px;">
+            <canvas id="yearChart"></canvas>
+          </div>
+        </div>
+
+        <!-- Calendar -->
+        <div class="card" style="padding:20px; position:relative;">
           <div class="cal-header">
-            <button id="calPrev" class="btn-sq">◀</button>
-            <span id="calLabel" class="center">— —</span>
-            <button id="calNext" class="btn-sq">▶</button>
+            <div>
+              <h3 style="font-size:16px; font-weight:600;">Activity calendar</h3>
+              <p class="text-xs text-dim" id="monthSub">—</p>
+            </div>
+            <div class="nav-btns">
+              <button class="cal-nav-btn" id="calPrev"></button>
+              <button class="cal-nav-btn" id="calNext"></button>
+            </div>
           </div>
           <div id="calGrid" class="cal-grid"></div>
           <div id="calPopover" class="cal-popover hidden"></div>
         </div>
-      </section>
-    </main>
-  </div>
+      </div>
+    </div>
+  </main>
 
   <script type="module" src="js/accounts.js"></script>
 </body>

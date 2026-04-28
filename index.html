@@ -3,14 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>OFFICE · LOGIN</title>
+  <title>OFFICE · Sign In</title>
 
-  <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@900&family=JetBrains+Mono:wght@500&family=Inter:wght@300;400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 
-  <!-- Firebase (v9 compat CDN) -->
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
@@ -18,80 +16,66 @@
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-
-  <!-- NAV -->
   <header class="nav">
     <div class="nav-left">
-      <span class="brand">OFFICE</span>
-      <span class="dot"></span>
-      <span class="version">OFFICE_V.01</span>
+      <div class="brand">
+        <span class="brand-mark">O</span>
+        <span>OFFICE</span>
+        <span class="brand-sub">v.01</span>
+      </div>
     </div>
     <div class="nav-right">
-      <span class="mono-label">DIGITAL_OFFICE_SYSTEM</span>
+      <span class="text-xs text-dim mono uppercase" id="clock">--:--:--</span>
     </div>
   </header>
 
-  <!-- HERO 2x2 -->
-  <section class="hero-grid">
-    <div class="hero-cell tl">
-      <span class="corner">SYSTEM_01</span>
-      <span class="fragment">OF</span>
-    </div>
-    <div class="hero-cell tr">
-      <span class="corner">SYSTEM_02</span>
-      <span class="fragment">FI</span>
-    </div>
-    <div class="hero-cell bl">
-      <span class="corner">SYSTEM_03</span>
-      <span class="fragment">CE</span>
-    </div>
-    <div class="hero-cell br">
-      <span class="corner">SYSTEM_04</span>
-      <span class="fragment">.01</span>
-    </div>
-  </section>
+  <main class="login-shell">
+    <div class="login-card">
+      <h1>Welcome to Office</h1>
+      <p class="tag">Digital_Office_System · Agency_Only</p>
 
-  <!-- COMMAND STRIP -->
-  <section class="command-strip">
-    <div>
-      <span class="mono-label">TAGLINE</span>
-      <span class="mono">DIGITAL_OFFICE_SYSTEM</span>
-    </div>
-    <div>
-      <span class="mono-label">ACCESS</span>
-      <button id="signInBtn" class="btn btn-accent">SIGN_IN_WITH_GOOGLE</button>
-    </div>
-    <div>
-      <span class="mono-label">LOCAL_TIME</span>
-      <span id="clock" class="clock">--:--:--</span>
-    </div>
-    <div>
-      <span class="mono-label">STATUS</span>
-      <div class="status-list">
-        <span>SECURE_LOGIN</span>
-        <span>FIREBASE_AUTH</span>
-        <span>AGENCY_ONLY</span>
+      <button id="signInBtn" class="google-btn">
+        <span id="g-icon"></span>
+        <span>Continue with Google</span>
+      </button>
+
+      <div class="login-meta">
+        <div class="stat-mini">
+          <div class="label">Auth</div>
+          <div class="value">Firebase</div>
+        </div>
+        <div class="stat-mini">
+          <div class="label">Access</div>
+          <div class="value">Agency_Only</div>
+        </div>
+        <div class="stat-mini">
+          <div class="label">Build</div>
+          <div class="value">v.01</div>
+        </div>
+        <div class="stat-mini">
+          <div class="label">Status</div>
+          <div class="value" style="color:var(--ok);">● Online</div>
+        </div>
       </div>
     </div>
-  </section>
+  </main>
 
   <script type="module">
     import { auth } from './js/firebase-config.js';
     import { signInWithGoogle, ensureProfile, toast } from './js/auth.js';
+    import { ICONS } from './js/icons.js';
 
-    // Clock
+    document.getElementById('g-icon').innerHTML = ICONS.google;
+
     function tick() {
       const d = new Date();
-      const hh = String(d.getHours()).padStart(2,'0');
-      const mm = String(d.getMinutes()).padStart(2,'0');
-      const ss = String(d.getSeconds()).padStart(2,'0');
+      const s = [d.getHours(), d.getMinutes(), d.getSeconds()]
+        .map(x=>String(x).padStart(2,'0')).join(':');
       const el = document.getElementById('clock');
-      if (el) el.textContent = `${hh}:${mm}:${ss}`;
+      if (el) el.textContent = s;
     }
-    tick();
-    setInterval(tick, 1000);
+    tick(); setInterval(tick, 1000);
 
-    // Auto-redirect if already signed in
     auth.onAuthStateChanged(async (user) => {
       if (user) {
         await ensureProfile(user);
@@ -99,7 +83,6 @@
       }
     });
 
-    // Sign-in handler
     document.getElementById('signInBtn').addEventListener('click', async () => {
       const user = await signInWithGoogle();
       if (!user) return;
