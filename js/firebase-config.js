@@ -11,12 +11,13 @@
 // Go to https://console.firebase.google.com -> Project Settings
 // -> General -> Your apps -> SDK setup and configuration.
 const firebaseConfig = {
-  apiKey: "REPLACE_WITH_YOUR_API_KEY",
-  authDomain: "REPLACE_WITH_YOUR_PROJECT.firebaseapp.com",
-  projectId: "REPLACE_WITH_YOUR_PROJECT_ID",
-  storageBucket: "REPLACE_WITH_YOUR_PROJECT.appspot.com",
-  messagingSenderId: "REPLACE_WITH_YOUR_SENDER_ID",
-  appId: "REPLACE_WITH_YOUR_APP_ID"
+  apiKey: "AIzaSyCkZg3bA41ni5H5Ms1ty1VW0GYCHHFwG9o",
+  authDomain: "office-kiktro.firebaseapp.com",
+  projectId: "office-kiktro",
+  storageBucket: "office-kiktro.firebasestorage.app",
+  messagingSenderId: "81591139255",
+  appId: "1:81591139255:web:acb94e8b4813bed54d4632",
+  measurementId: "G-J7WCFZYWW7"
 };
 
 // ---------------------------------------------------------
