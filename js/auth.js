@@ -178,7 +178,7 @@ export function renderNav(user, profile) {
         <div class="avatar">${initial}</div>
         <div class="pmeta">
           <span class="pname">${escape(profile?.name || user.displayName || 'User')}</span>
-          <span class="prole">${profile?.role || 'Member'}</span>
+          <span class="prole">${rolesLabel(profile?.roles || profile?.role)}</span>
         </div>
         <span class="online-dot" title="Online"></span>
       </div>
@@ -204,11 +204,6 @@ export function renderTabs(activeId) {
 }
 
 /* ---------- Helpers ---------- */
-export function roleTagHTML(role) {
-  if (!role) return '';
-  return `<span class="role-pill role-${role}">${role}</span>`;
-}
-
 export function statusPill(status) {
   const cls = {
     'Completed':'completed', 'In Progress':'in-progress', 'Blocked':'blocked',
