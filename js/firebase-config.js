@@ -26,7 +26,7 @@ const firebaseConfig = {
 // After you log in once with your Google account, open the
 // Firebase Authentication console, copy your UID, and paste it
 // here. Only this UID can access /admin.html.
-export const ADMIN_UID = "REPLACE_WITH_YOUR_FIREBASE_UID";
+export const ADMIN_UID = "NsODVaQ47zT0xwtPjl5rMonfvuC3";
 
 // Initialise only once (compat SDK exposes global `firebase`)
 if (!firebase.apps.length) {
